@@ -3,6 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServerTest.Identity", "IdentityServerTest.Identity\IdentityServerTest.Identity.csproj", "{68884243-8220-4D1E-96CD-C44C9FDC6806}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServerTest.WebApi", "IdentityServerTest.WebApi\IdentityServerTest.WebApi.csproj", "{8833640C-D973-471A-AAB0-EA7AAB1E1A6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServerTest.WebSite", "IdentityServerTest.WebSite\IdentityServerTest.WebSite.csproj", "{0DB5FDC3-5DD9-49D9-9D3B-6632DB47F835}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServerTest.ConsoleAppResourceOwner", "IdentityServerTest.ConsoleAppResourceOwner\IdentityServerTest.ConsoleAppResourceOwner.csproj", "{776D5C20-8CDB-4A03-8407-E74268D65A70}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,5 +19,17 @@ Global
 		{68884243-8220-4D1E-96CD-C44C9FDC6806}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68884243-8220-4D1E-96CD-C44C9FDC6806}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68884243-8220-4D1E-96CD-C44C9FDC6806}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8833640C-D973-471A-AAB0-EA7AAB1E1A6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8833640C-D973-471A-AAB0-EA7AAB1E1A6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8833640C-D973-471A-AAB0-EA7AAB1E1A6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8833640C-D973-471A-AAB0-EA7AAB1E1A6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DB5FDC3-5DD9-49D9-9D3B-6632DB47F835}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DB5FDC3-5DD9-49D9-9D3B-6632DB47F835}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DB5FDC3-5DD9-49D9-9D3B-6632DB47F835}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DB5FDC3-5DD9-49D9-9D3B-6632DB47F835}.Release|Any CPU.Build.0 = Release|Any CPU
+		{776D5C20-8CDB-4A03-8407-E74268D65A70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{776D5C20-8CDB-4A03-8407-E74268D65A70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{776D5C20-8CDB-4A03-8407-E74268D65A70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{776D5C20-8CDB-4A03-8407-E74268D65A70}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -10,20 +10,24 @@ using Microsoft.Extensions.Logging;
 
 namespace IdentityServerTest.Identity
 {
-    public class Startup
-    {
-        public void ConfigureServices(IServiceCollection services)
-        {
+	public class Startup
+	{
+		public void ConfigureServices(IServiceCollection services)
+		{
 			services.AddIdentityServer()
+			        .AddInMemoryApiResources(IdentityServerConfigurations.GetApiResources())
+					.AddInMemoryClients(IdentityServerConfigurations.GetClients())
+			        .AddTestUsers(IdentityServerConfigurations.GetTestUsers())
+			        .AddInMemoryIdentityResources(IdentityServerConfigurations.GetIdentityResources())
 			        .AddTemporarySigningCredential();
 		}
 
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
-        {
-            loggerFactory.AddConsole();
-            app.UseDeveloperExceptionPage();
+		public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+		{
+			loggerFactory.AddConsole();
+			app.UseDeveloperExceptionPage();
 
 			app.UseIdentityServer();
-        }
-    }
+		}
+	}
 }
