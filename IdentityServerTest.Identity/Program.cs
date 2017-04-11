@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace IdentityServerTest.Identity
 {
+    // test commit
     public class Program
     {
         public static void Main(string[] args)
