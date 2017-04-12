@@ -26,6 +26,7 @@ namespace IdentityServerTest.WebApi
 
 		public void ConfigureServices(IServiceCollection services)
 		{
+            // See https://leastprivilege.com/2015/12/28/validating-scopes-in-asp-net-4-and-5/ for scope and policy example
             // Setup a policy which check for the scope claim and allow access.
             services.AddAuthorization(options => {
                 options.AddPolicy("api.call", policy => policy.RequireClaim("scope", "api.call"));
