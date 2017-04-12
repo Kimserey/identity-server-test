@@ -21,8 +21,25 @@ namespace IdentityServerTest.Identity
 		{
 			return new List<ApiResource>
 			{
-				new ApiResource("webapi", "Web Api")
-			};
+				new ApiResource("webapi", "Web Api"),
+                new ApiResource("api", "Web Api call")
+                {
+                    ApiSecrets =
+                    {
+                        // Api secret is used for the introspect endpoint.
+                        // The introspect endpoint is hit by the client to find back
+                        // identity using Reference token.
+                        // Because the introspect endpoint needs authentication,
+                        // the secret is used together with API name.
+                        new Secret("secret".Sha256())
+                    },
+                    Scopes =
+                    {
+                        new Scope("api.call"),
+                        new Scope("api.receive")
+                    }
+                }
+            };
 		}
 
 		public static IEnumerable<Client> GetClients()
@@ -32,20 +49,33 @@ namespace IdentityServerTest.Identity
 				new Client {
 					ClientId = "website_1",
 					ClientName = "Website 1",
-					AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
+					AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
 					ClientSecrets =
 					{
 						new Secret("secret".Sha256())
 					},
 					AllowedScopes =
 					{
-						"webapi"
-					},
+                        "api.receive"
+                    },
 					Claims =
 					{
 						new Claim("site.context", "one")
-					}
-				},
+					},
+                    AccessTokenType = AccessTokenType.Reference
+                },
+                new Client {
+                    ClientId = "website_call",
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+                    AllowedScopes = {
+                        "api.call"
+                    },
+                    AccessTokenType = AccessTokenType.Reference
+                },
 				new Client {
 					ClientId = "website_2",
 					ClientName = "website_2",

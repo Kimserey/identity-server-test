@@ -26,6 +26,11 @@ namespace IdentityServerTest.WebApi
 
 		public void ConfigureServices(IServiceCollection services)
 		{
+            // Setup a policy which check for the scope claim and allow access.
+            services.AddAuthorization(options => {
+                options.AddPolicy("api.call", policy => policy.RequireClaim("scope", "api.call"));
+            });
+
 			services.AddMvc();
 		}
 
@@ -34,14 +39,17 @@ namespace IdentityServerTest.WebApi
 			loggerFactory.AddConsole(Configuration.GetSection("Logging"));
 			loggerFactory.AddDebug();
 
-			var options = new IdentityServerAuthenticationOptions
-			{
-				ApiName = "webapi",
-				Authority = "http://localhost:5000",
-				RequireHttpsMetadata = false
-			};
-			app.UseIdentityServerAuthentication(options);
-			app.UseMvc();
+            app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
+            {
+                // Sets the authority with the api and secret to exchange reference token for identity.
+                Authority = "http://localhost:5000",
+                ApiName = "api",
+                ApiSecret = "secret",
+                AutomaticAuthenticate = true,
+                RequireHttpsMetadata = false
+            });
+
+            app.UseMvc();
 		}
 	}
 }

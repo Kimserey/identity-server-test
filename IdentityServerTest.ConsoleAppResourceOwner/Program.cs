@@ -25,6 +25,7 @@ namespace IdentityServerTest.ConsoleAppResourceOwner
 		static void Main(string[] args)
 		{
 			GetToken().Wait();
+            Console.ReadKey();
 		}
 	}
 }
