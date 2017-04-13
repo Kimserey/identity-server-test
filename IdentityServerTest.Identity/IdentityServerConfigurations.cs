@@ -11,9 +11,9 @@ namespace IdentityServerTest.Identity
 		public static IEnumerable<IdentityResource> GetIdentityResources()
 		{
 			return new List<IdentityResource>
-			{
-				new IdentityResources.OpenId(),
-				new IdentityResources.Profile()
+            {
+                new IdentityResources.OpenId(),
+                new IdentityResources.Profile()
 			};
 		}
 
@@ -66,7 +66,7 @@ namespace IdentityServerTest.Identity
                 },
                 new Client {
                     ClientId = "website_call",
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                     ClientSecrets =
                     {
                         new Secret("secret".Sha256())
