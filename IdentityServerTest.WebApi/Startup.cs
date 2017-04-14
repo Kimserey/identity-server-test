@@ -47,7 +47,7 @@ namespace IdentityServerTest.WebApi
                 ApiName = "api",
                 ApiSecret = "secret",
                 AutomaticAuthenticate = true,
-                RequireHttpsMetadata = false
+                RequireHttpsMetadata = false,
             });
 
             app.UseMvc();

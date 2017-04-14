@@ -50,7 +50,10 @@ namespace IdentityServerTest.WebSite
 				AuthenticationScheme = "Cookies"
 			});
 
-			JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            // Turn off the JWT claim type mapping to allow well-known claims (e.g. ‘sub’ and ‘idp’) 
+            // to flow through unmolested.
+            // Otherwise claim names are changed. (e.g 'sub' becomes 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier')
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 			app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions {
 				SignInScheme = "Cookies",
@@ -58,7 +61,8 @@ namespace IdentityServerTest.WebSite
 				Authority = "http://localhost:5000",
 				RequireHttpsMetadata = false,
 				SaveTokens = true,
-				ClientId = "website_2"
+				ClientId = "website_2",
+                GetClaimsFromUserInfoEndpoint = true
 			});
 
             app.UseStaticFiles();
