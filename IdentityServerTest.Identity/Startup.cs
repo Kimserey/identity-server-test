@@ -17,8 +17,8 @@ namespace IdentityServerTest.Identity
 			services.AddIdentityServer()
 			        .AddInMemoryApiResources(Configs.GetApiResources())
 					.AddInMemoryClients(Configs.GetClients())
-			        .AddTestUsers(Configs.GetTestUsers())
 			        .AddInMemoryIdentityResources(Configs.GetIdentityResources())
+			        .AddTestUsers(Configs.GetTestUsers())
 			        .AddTemporarySigningCredential();
 		}
 
