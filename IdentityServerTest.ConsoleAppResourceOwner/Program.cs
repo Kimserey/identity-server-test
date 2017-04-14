@@ -16,22 +16,41 @@ namespace IdentityServerTest.ConsoleAppResourceOwner
 		{
 			var disco = await DiscoveryClient.GetAsync("http://localhost:5000");
 			// request token
-			var tokenClient = new TokenClient(disco.TokenEndpoint, "website_1", "secret");
+			var tokenClient = new TokenClient(disco.TokenEndpoint, "website_call", "secret");
             var tokenResponse = await tokenClient.RequestResourceOwnerPasswordAsync("alice", "password");
-
-			if (tokenResponse.IsError)
+            
+            if (tokenResponse.IsError)
 			{
 				Console.WriteLine(tokenResponse.Error);
 				return;
 			}
 
 			Console.WriteLine(tokenResponse.Json);
-		}
 
-		static void Main(string[] args)
-		{
-			GetToken().Wait();
-            Console.ReadKey();
-		}
+            var extraClaims = new UserInfoClient(disco.UserInfoEndpoint);
+            var identityClaims = await extraClaims.GetAsync(tokenResponse.AccessToken);
+
+            if (!tokenResponse.IsError)
+            {
+                Console.WriteLine(identityClaims.Json);
+            }
+        }
+
+        static void Main(string[] args)
+        {
+            while (true)
+            {
+                try
+                {
+                    GetToken().Wait();
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+                Console.ReadKey();
+            }
+        }
 	}
 }

@@ -1,20 +1,29 @@
-﻿using System;
+﻿using System;   
 using System.Security.Claims;
 using System.Collections.Generic;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
+using IdentityModel;
+using IdentityServer4;
 
 namespace IdentityServerTest.Identity
 {
 	public class IdentityServerConfigurations
 	{
-		public static IEnumerable<IdentityResource> GetIdentityResources()
+        // Identity resources are retrieved from the UserInfo endpoint.
+        // It can be set on the middleware "GetClaimsFromUserInfoEndpoint=true",
+        // or can be invoked from the SDK client with UserInfoClient.
+        // Place retrievable identity information here.
+        public static IEnumerable<IdentityResource> GetIdentityResources()
 		{
 			return new List<IdentityResource>
             {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile()
-			};
+                // Every default IdentityResources contain a set of JwtUserClaims which will
+                // be added to the token.
+                new IdentityResources.Profile(),
+                new IdentityResources.Email()
+            };
 		}
 
 		public static IEnumerable<ApiResource> GetApiResources()
@@ -56,7 +65,8 @@ namespace IdentityServerTest.Identity
 					},
 					AllowedScopes =
 					{
-                        "api.receive"
+                        "api.receive",
+                        JwtClaimTypes.Profile,
                     },
 					Claims =
 					{
@@ -72,9 +82,13 @@ namespace IdentityServerTest.Identity
                         new Secret("secret".Sha256())
                     },
                     AllowedScopes = {
-                        "api.call"
-                    },
-                    AccessTokenType = AccessTokenType.Reference
+                        "api.call",
+                        // OpenId scope must be allowed scope to retrieve Identity claims from UserInfo endpoint.
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email
+                    }
+                    //AccessTokenType = AccessTokenType.Reference
                 },
 				new Client {
 					ClientId = "website_2",
@@ -84,11 +98,8 @@ namespace IdentityServerTest.Identity
 					AllowedGrantTypes = GrantTypes.Implicit,
 					AllowedScopes =
 					{
-						"webapi"
-					},
-					Claims =
-					{
-						new Claim("site.context", "two")
+						"webapi",
+                        IdentityServerConstants.StandardScopes.Profile
 					}
 				}
 			};
@@ -103,8 +114,12 @@ namespace IdentityServerTest.Identity
 					Password = "password",
 					Claims = 
 					{
-						new Claim("test", "test")
-					}
+						new Claim("test", "test"),
+                        new Claim(JwtClaimTypes.Name, "alice"),
+                        new Claim(JwtClaimTypes.NickName, "nickname"),
+                        new Claim(JwtClaimTypes.Email, "test1@gmail.com"),
+                        new Claim(JwtClaimTypes.EmailVerified, "test2@gmail.com")
+                    }
 				},
 				new TestUser
 				{

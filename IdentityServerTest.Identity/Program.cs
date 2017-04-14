@@ -14,7 +14,7 @@ namespace IdentityServerTest.Identity
         {
             var host = new WebHostBuilder()
                 .UseKestrel()
-				.UseUrls(new string[] { "http://localhost:5000" })
+				.UseUrls("http://localhost:5000")
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
