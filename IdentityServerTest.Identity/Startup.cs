@@ -15,10 +15,10 @@ namespace IdentityServerTest.Identity
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddIdentityServer()
-			        .AddInMemoryApiResources(IdentityServerConfigurations.GetApiResources())
-					.AddInMemoryClients(IdentityServerConfigurations.GetClients())
-			        .AddTestUsers(IdentityServerConfigurations.GetTestUsers())
-			        .AddInMemoryIdentityResources(IdentityServerConfigurations.GetIdentityResources())
+			        .AddInMemoryApiResources(Configs.GetApiResources())
+					.AddInMemoryClients(Configs.GetClients())
+			        .AddTestUsers(Configs.GetTestUsers())
+			        .AddInMemoryIdentityResources(Configs.GetIdentityResources())
 			        .AddTemporarySigningCredential();
 		}
 

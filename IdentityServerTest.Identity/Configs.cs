@@ -8,7 +8,7 @@ using IdentityServer4;
 
 namespace IdentityServerTest.Identity
 {
-	public class IdentityServerConfigurations
+	public class Configs
 	{
         // Identity resources are retrieved from the UserInfo endpoint.
         // It can be set on the middleware "GetClaimsFromUserInfoEndpoint=true",
