@@ -54,8 +54,24 @@ namespace IdentityServerTest.Identity
 		public static IEnumerable<Client> GetClients()
 		{
 			return new List<Client>
-			{
-				new Client {
+            {
+                new Client {
+                    ClientId = "client",
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+                    AllowedScopes = {
+                        "api.call",
+                        // OpenId scope must be allowed scope to retrieve Identity claims from UserInfo endpoint.
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email
+                    },
+                    AccessTokenType = AccessTokenType.Reference
+                },
+                new Client {
 					ClientId = "website_1",
 					ClientName = "Website 1",
 					AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
@@ -73,22 +89,6 @@ namespace IdentityServerTest.Identity
 						new Claim("site.context", "one")
 					},
                     AccessTokenType = AccessTokenType.Reference
-                },
-                new Client {
-                    ClientId = "website_call",
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-                    ClientSecrets =
-                    {
-                        new Secret("secret".Sha256())
-                    },
-                    AllowedScopes = {
-                        "api.call",
-                        // OpenId scope must be allowed scope to retrieve Identity claims from UserInfo endpoint.
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        IdentityServerConstants.StandardScopes.Email
-                    }
-                    //AccessTokenType = AccessTokenType.Reference
                 },
 				new Client {
 					ClientId = "website_2",
