@@ -46,6 +46,10 @@ namespace IdentityServerTest.Identity
                     {
                         new Scope("api.call"),
                         new Scope("api.receive")
+                    },
+                    UserClaims =
+                    {
+                        JwtClaimTypes.Name
                     }
                 }
             };
@@ -69,7 +73,10 @@ namespace IdentityServerTest.Identity
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email
                     },
-                    AccessTokenType = AccessTokenType.Reference
+                    AccessTokenType = AccessTokenType.Reference,
+                    Claims = {
+                        new Claim("client-claim", "test")
+                    }
                 },
                 new Client {
 					ClientId = "website_1",

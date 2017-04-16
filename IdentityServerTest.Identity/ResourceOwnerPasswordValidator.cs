@@ -1,5 +1,6 @@
 ﻿using IdentityModel;
 using IdentityServer4.Validation;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,13 @@ namespace IdentityServerTest.Identity
     // 
     public class ResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
     {
+        private ILogger _logger;
+
+        public ResourceOwnerPasswordValidator(ILogger<ResourceOwnerPasswordValidator> logger)
+        {
+            _logger = logger;
+        }
+
         // Auhtentication method reference "amr":
         // https://tools.ietf.org/html/draft-jones-oauth-amr-values-00#section-7.1
         //
@@ -23,10 +31,12 @@ namespace IdentityServerTest.Identity
         //
         public Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
         {
+            _logger.LogDebug("Validate ResourceOwnerPassword");
+
             context.Result = new GrantValidationResult(
                 "alice",
                 OidcConstants.AuthenticationMethods.Password,
-                new List<Claim>());
+                new List<Claim> { new Claim(JwtClaimTypes.Name, "Alice") });
             return Task.FromResult(0);
         }
     }
