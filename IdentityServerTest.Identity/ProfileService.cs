@@ -9,14 +9,17 @@ namespace IdentityServerTest.Identity
 {
     public class ProfileService : IProfileService
     {
+        // Will be consulted after the IsActiveAsync is consulted.
         public Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(0);
         }
 
+        // Will be consulted after the Resource Owner password validator returns a valid grant.
         public Task IsActiveAsync(IsActiveContext context)
         {
-            throw new NotImplementedException();
+            context.IsActive = true;
+            return Task.FromResult(0);
         }
     }
 }

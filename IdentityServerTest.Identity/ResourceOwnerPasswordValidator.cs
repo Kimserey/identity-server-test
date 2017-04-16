@@ -20,6 +20,7 @@ namespace IdentityServerTest.Identity
         // Authentication Methods References. JSON array of strings that are identifiers for authentication methods used in
         // the authentication.For instance, values might indicate that both
         // password and OTP authentication methods were used.
+        //
         public Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
         {
             context.Result = new GrantValidationResult(

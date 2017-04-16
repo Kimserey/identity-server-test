@@ -18,6 +18,7 @@ namespace IdentityServerTest.ConsoleAppResourceOwner
 
             // Get the token
             //
+            Console.WriteLine("Getting token");
             var tokenClient = new TokenClient(disco.TokenEndpoint, "client", "secret");
             var tokenResponse = await tokenClient.RequestResourceOwnerPasswordAsync("alice", "password");
             if (tokenResponse.IsError)
@@ -78,6 +79,8 @@ namespace IdentityServerTest.ConsoleAppResourceOwner
         {
             while (true)
             {
+                Console.WriteLine("Press any key to start...");
+                Console.ReadKey();
                 try
                 {
                     Start().Wait();
