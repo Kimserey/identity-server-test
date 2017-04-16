@@ -20,7 +20,7 @@ namespace IdentityServerTest.Identity
         // Will be consulted after the IsActiveAsync is consulted.
         public Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
-            _logger.LogDebug("Hello world");
+            _logger.LogError("Hello world");
             return Task.FromResult(0);
         }
 
