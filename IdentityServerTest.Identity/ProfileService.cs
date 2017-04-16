@@ -19,6 +19,12 @@ namespace IdentityServerTest.Identity
         }
 
         // Will be consulted after the IsActiveAsync is consulted.
+        // This is requested when token endpoint is invoked for Api resources required claims,
+        // and when User info endpoint is invoked for Identity resources required claims.
+        // The identity claims are separated from the Api resources claims to keep the token small.
+        // If a claim, e.g "name", is vitale for the Api and needs to be in every access token, it can be added in
+        // the UserClaims on the ApiResource configuration. This will ensure that on token request, the claim will be present.
+        //
         public Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
             _logger.LogDebug("Get profile data");

@@ -10,11 +10,11 @@ using System.Net.Http.Headers;
 
 namespace IdentityServerTest.ConsoleAppResourceOwner
 {
-	class Program
+    class Program
     {
         public static async Task Start()
-		{
-			var disco = await DiscoveryClient.GetAsync("http://localhost:5000");
+        {
+            var disco = await DiscoveryClient.GetAsync("http://localhost:5000");
 
             // Get the token
             //
@@ -22,19 +22,26 @@ namespace IdentityServerTest.ConsoleAppResourceOwner
             var tokenClient = new TokenClient(disco.TokenEndpoint, "client", "secret");
             var tokenResponse = await tokenClient.RequestResourceOwnerPasswordAsync("alice", "password");
             if (tokenResponse.IsError)
-			{
-				Console.WriteLine(tokenResponse.Error);
-				return;
-			}
-			Console.WriteLine(tokenResponse.Json);
+            {
+                Console.WriteLine(tokenResponse.Error);
+                return;
+            }
+            Console.WriteLine(tokenResponse.Json);
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();
 
             // Query API with access token
             //
             Console.WriteLine("Querying API to get data using token");
-            var data = GetData(tokenResponse.AccessToken).Result;
-            Console.WriteLine(data);
+            try
+            {
+                var data = GetData(tokenResponse.AccessToken).Result;
+                Console.WriteLine(data);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();
 
@@ -85,11 +92,11 @@ namespace IdentityServerTest.ConsoleAppResourceOwner
                 {
                     Start().Wait();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                 }
             }
         }
-	}
+    }
 }

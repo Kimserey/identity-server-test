@@ -73,7 +73,6 @@ namespace IdentityServerTest.Identity
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email
                     },
-                    AccessTokenType = AccessTokenType.Reference,
                     Claims = {
                         new Claim("client-claim", "test")
                     }
