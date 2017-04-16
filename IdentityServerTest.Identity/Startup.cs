@@ -35,7 +35,7 @@ namespace IdentityServerTest.Identity
             //
             // Output template dictates the format of the printed logs.
             //
-                  loggerFactory.AddSerilog(
+            loggerFactory.AddSerilog(
                 new LoggerConfiguration()
                     .MinimumLevel.Debug()
                     .WriteTo.LiterateConsole(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message}{NewLine}{Exception}{NewLine}")
