@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Filter;
 using Serilog;
+using IdentityServer4.Stores;
 
 namespace IdentityServerTest.Identity
 {
@@ -46,8 +47,11 @@ namespace IdentityServerTest.Identity
 
         public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddIdentityServer()
-			        .AddInMemoryApiResources(Configs.GetApiResources())
+            // Binding services before adding Identity server is required
+            // as Identity server uses "TryAdd" for default stores.
+            services.AddSingleton<IPersistedGrantStore, SqlitePersistedGrandStore>()
+                    .AddIdentityServer()
+                    .AddInMemoryApiResources(Configs.GetApiResources())
 					.AddInMemoryClients(Configs.GetClients())
 			        .AddInMemoryIdentityResources(Configs.GetIdentityResources())
                     .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
