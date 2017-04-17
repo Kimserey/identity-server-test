@@ -49,7 +49,7 @@ namespace IdentityServerTest.Identity
 		{
             // Binding services before adding Identity server is required
             // as Identity server uses "TryAdd" for default stores.
-            services.AddSingleton<IPersistedGrantStore, SqlitePersistedGrandStore>()
+            services.AddSingleton<IPersistedGrantStore, ArangoPersistedGrandStore>()
                     .AddIdentityServer()
                     .AddInMemoryApiResources(Configs.GetApiResources())
 					.AddInMemoryClients(Configs.GetClients())
