@@ -47,6 +47,9 @@ namespace IdentityServerTest.Identity
 
             loggerFactory.AddSerilog(logger);
 
+            // Configuration builder taking the appsettings
+            // and parsing it into IConfigurationRoot.
+            //
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json")
@@ -56,6 +59,7 @@ namespace IdentityServerTest.Identity
 
         public void ConfigureServices(IServiceCollection services)
 		{
+            // Allows to inject IOptions<ArangoDBConfiguration> in classes.
             services.Configure<ArangoDBConfiguration>(Configuration.GetSection("ArangoDB"));
             
             // Binding services before adding Identity server is required
