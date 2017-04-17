@@ -75,7 +75,8 @@ namespace IdentityServerTest.Identity
                     },
                     Claims = {
                         new Claim("client-claim", "test")
-                    }
+                    },
+                    AccessTokenType = AccessTokenType.Reference
                 },
                 new Client {
 					ClientId = "website_1",
