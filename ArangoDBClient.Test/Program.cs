@@ -1,5 +1,6 @@
 ﻿using ArangoDB.Client;
 using ArangoDB.Client.Property;
+using ArangoDB.Client.Utility;
 using System;
 using System.Net;
 
@@ -26,6 +27,16 @@ namespace ArangoDBClient.Test
             public string Text { get; set; }
         }
 
+        public static string ResolveId(string id, string collectionName = null)
+        {
+            return id.IndexOf("/") == -1 ? $"{Encode(collectionName)}/{Encode(id)}" : Encode(id);
+        }
+
+        public static string Encode(string s)
+        {
+            return WebUtility.UrlEncode(s);
+        }
+
         static void Main(string[] args)
         {
             var creds = new NetworkCredential("root", "123456");
@@ -37,14 +48,16 @@ namespace ArangoDBClient.Test
                 s.SystemDatabaseCredential = creds;
             });
 
+            // Keys must be saved without encoding but
+            // retrieved with UrlEncoding.
+            //
             using (var database = ArangoDatabase.CreateWithSetting())
             {
-                database.Collection("Hello").Insert(new Hello { Key = "+++" });
-                var data = database.Collection("Hello").Document<Hello>("+++");
+                //database.Collection("Hello").Insert(new Hello { Key = "+++" });
+                var data = database.Collection("Hello").Document<Hello>(WebUtility.UrlEncode("+++"));
 
-                //var grant = database.Document<PersistedGrants>("gmzAS+Gw3zjqPNU0sFvRBC9AGkZqXyNxRx+HQhPiUvs=");
-                //Console.WriteLine(WebUtility.UrlEncode("gmzAS+Gw3zjqPNU0sFvRBC9AGkZqXyNxRx+HQhPiUvs="));
-                //Console.WriteLine(grant.Key);
+                var grant = database.Collection("PersistedGrants").Document<PersistedGrants>(WebUtility.UrlEncode("gmzAS+Gw3zjqPNU0sFvRBC9AGkZqXyNxRx+HQhPiUvs="));
+                Console.WriteLine(grant.Key);
             }
         }
     }
