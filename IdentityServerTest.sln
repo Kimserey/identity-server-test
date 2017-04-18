@@ -1,6 +1,7 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.3
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServerTest.Identity", "IdentityServerTest.Identity\IdentityServerTest.Identity.csproj", "{68884243-8220-4D1E-96CD-C44C9FDC6806}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServerTest.WebApi", "IdentityServerTest.WebApi\IdentityServerTest.WebApi.csproj", "{8833640C-D973-471A-AAB0-EA7AAB1E1A6E}"
@@ -8,6 +9,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServerTest.WebSite", "IdentityServerTest.WebSite\IdentityServerTest.WebSite.csproj", "{0DB5FDC3-5DD9-49D9-9D3B-6632DB47F835}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServerTest.ConsoleAppResourceOwner", "IdentityServerTest.ConsoleAppResourceOwner\IdentityServerTest.ConsoleAppResourceOwner.csproj", "{776D5C20-8CDB-4A03-8407-E74268D65A70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArangoDBClient.Test", "ArangoDBClient.Test\ArangoDBClient.Test.csproj", "{90292DC5-9167-4711-B52E-E85C58F646EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,5 +34,12 @@ Global
 		{776D5C20-8CDB-4A03-8407-E74268D65A70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{776D5C20-8CDB-4A03-8407-E74268D65A70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{776D5C20-8CDB-4A03-8407-E74268D65A70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90292DC5-9167-4711-B52E-E85C58F646EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90292DC5-9167-4711-B52E-E85C58F646EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90292DC5-9167-4711-B52E-E85C58F646EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90292DC5-9167-4711-B52E-E85C58F646EE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

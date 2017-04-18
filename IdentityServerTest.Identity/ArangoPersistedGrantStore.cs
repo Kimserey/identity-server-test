@@ -35,12 +35,17 @@ namespace IdentityServerTest.Identity
             _logger = logger;
             _arangoDBConfig = arangoDBConfig.Value;
 
+            var creds = new NetworkCredential(
+                _arangoDBConfig.Credentials.UserName,
+                _arangoDBConfig.Credentials.Password
+            );
+
             ArangoDatabase.ChangeSetting(s =>
             {
                 s.Database = arangoDBConfig.Value.Database;
                 s.Url = arangoDBConfig.Value.Url;
-                s.Credential = new NetworkCredential("root", "123456");
-                s.SystemDatabaseCredential = new NetworkCredential("root", "123456");
+                s.Credential = creds;
+                s.SystemDatabaseCredential = creds;
             });
         }
 
@@ -110,8 +115,9 @@ namespace IdentityServerTest.Identity
         {
             using (var database = ArangoDatabase.CreateWithSetting())
             {
+                var encodedKey = WebUtility.UrlEncode(key);
                 await database.Collection(_arangoDBConfig.Collections.PersistedGrants)
-                    .RemoveByIdAsync(key);
+                    .RemoveByIdAsync(encodedKey);
             }
         }
 

@@ -9,7 +9,14 @@ namespace IdentityServerTest.Identity
     {
         public string Url { get; set; }
         public string Database { get; set; }
+        public Credentials Credentials { get; set; }
         public ArangoDBCollections Collections { get; set; }
+    }
+
+    public class Credentials
+    {
+        public string UserName { get; set; }
+        public string Password { get; set; }
     }
 
     public class ArangoDBCollections
