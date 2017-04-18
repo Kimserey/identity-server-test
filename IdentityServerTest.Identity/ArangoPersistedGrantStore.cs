@@ -57,6 +57,7 @@ namespace IdentityServerTest.Identity
         // We can't simply 'url encode' the key and save the document under the encoded key 
         // because when retrieving the data, Arango will try to decode the key which will result in the 'decoded' key checked against the 'encoded' key (saved in database).
         //
+        // We only need to encode the value to use it as key - decoding is not needed as we hold the original value in the data.
         private static string ToBase64UrlFromString(string value)
         {
             return Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes("hello/world"))
