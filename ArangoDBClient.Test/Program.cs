@@ -37,6 +37,17 @@ namespace ArangoDBClient.Test
             return WebUtility.UrlEncode(s);
         }
 
+        // Logic extracted from Owin Katana Base64UrlTextEncoder 
+        // https://github.com/yreynhout/katana-clone/blob/master/src/Microsoft.Owin.Security/DataHandler/Encoder/Base64UrlTextEncoder.cs
+        //
+        public static string ToBase64UrlFromString(string value)
+        {
+            return Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes("hello/world"))
+                .TrimEnd('=')
+                .Replace('+', '-')
+                .Replace('/', '_');
+        }
+
         static void Main(string[] args)
         {
             var creds = new NetworkCredential("root", "123456");
@@ -53,11 +64,11 @@ namespace ArangoDBClient.Test
             //
             using (var database = ArangoDatabase.CreateWithSetting())
             {
-                //database.Collection("Hello").Insert(new Hello { Key = "+++" });
-                var data = database.Collection("Hello").Document<Hello>(WebUtility.UrlEncode("+++"));
+                database.Collection("Hello").Insert(new Hello { Key = ToBase64UrlFromString("hello/world"), Text = "Hello world" });
+                var data = database.Collection("Hello").Document<Hello>(ToBase64UrlFromString("hello/world"));
 
-                var grant = database.Collection("PersistedGrants").Document<PersistedGrants>(WebUtility.UrlEncode("gmzAS+Gw3zjqPNU0sFvRBC9AGkZqXyNxRx+HQhPiUvs="));
-                Console.WriteLine(grant.Key);
+                //var grant = database.Collection("PersistedGrants").Document<PersistedGrants>(WebUtility.UrlEncode("gmzAS+Gw3zjqPNU0sFvRBC9AGkZqXyNxRx+HQhPiUvs="));
+                //Console.WriteLine(grant.Key);
             }
         }
     }

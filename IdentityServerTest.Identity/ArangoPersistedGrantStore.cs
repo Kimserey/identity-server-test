@@ -17,8 +17,10 @@ namespace IdentityServerTest.Identity
     {
         private class ArangoDBPersistedGrant
         {
+            // The key will be an opaque key which we will use internally only
             [DocumentProperty(Identifier = IdentifierType.Key)]
             public string Key { get; set; }
+            public string GrantKey { get; set; }
             public string Type { get; set; }
             public string SubjectId { get; set; }
             public string ClientId { get; set; }
@@ -49,6 +51,20 @@ namespace IdentityServerTest.Identity
             });
         }
 
+        // Logic extracted from Owin Katana Base64UrlTextEncoder 
+        // https://github.com/yreynhout/katana-clone/blob/master/src/Microsoft.Owin.Security/DataHandler/Encoder/Base64UrlTextEncoder.cs
+        // We need to use base 64 because the grant key might contain slashes which is not supported by Arango.
+        // We can't simply 'url encode' the key and save the document under the encoded key 
+        // because when retrieving the data, Arango will try to decode the key which will result in the 'decoded' key checked against the 'encoded' key (saved in database).
+        //
+        private static string ToBase64UrlFromString(string value)
+        {
+            return Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes("hello/world"))
+                .TrimEnd('=')
+                .Replace('+', '-')
+                .Replace('/', '_');
+        }
+
         public async Task<IEnumerable<PersistedGrant>> GetAllAsync(string subjectId)
         {
             using (var database = ArangoDatabase.CreateWithSetting())
@@ -57,7 +73,7 @@ namespace IdentityServerTest.Identity
                     .Where(pg => pg.SubjectId == subjectId)
                     .Select(grant => new PersistedGrant
                     {
-                        Key = grant.Key,
+                        Key = grant.GrantKey,
                         ClientId = grant.ClientId,
                         CreationTime = grant.CreationTime,
                         Data = grant.Data,
@@ -74,11 +90,11 @@ namespace IdentityServerTest.Identity
             using (var database = ArangoDatabase.CreateWithSetting())
             {
                 var grant = await database.Collection(_arangoDBConfig.Collections.PersistedGrants)
-                    .DocumentAsync<ArangoDBPersistedGrant>(key);
+                    .DocumentAsync<ArangoDBPersistedGrant>(ToBase64UrlFromString(key));
 
                 return new PersistedGrant
                 {
-                    Key = grant.Key,
+                    Key = grant.GrantKey,
                     ClientId = grant.ClientId,
                     CreationTime = grant.CreationTime,
                     Data = grant.Data,
@@ -125,10 +141,17 @@ namespace IdentityServerTest.Identity
         {
             using (var database = ArangoDatabase.CreateWithSetting())
             {
-                await database.Collection(_arangoDBConfig.Collections.PersistedGrants)
+                var collection = database.Collection(_arangoDBConfig.Collections.PersistedGrants);
+                var encodedKey = ToBase64UrlFromString(grant.Key);
+
+                if (await collection.ExistsAsync(encodedKey))
+                    return;
+
+                await collection
                     .InsertAsync(
                         new ArangoDBPersistedGrant {
-                            Key = grant.Key,
+                            Key = encodedKey,
+                            GrantKey = grant.Key,
                             ClientId = grant.ClientId,
                             CreationTime = grant.CreationTime,
                             Data = grant.Data,
