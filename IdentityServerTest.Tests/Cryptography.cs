@@ -17,5 +17,16 @@ namespace IdentityServerTest.Tests
             Assert.NotEqual("HelloWorld", hashedPwd);
             Assert.True(result);
         }
+
+        [Fact]
+        public void HashAndVerifyWrongPassword_ShouldFail()
+        {
+            var cryptography = new Cryptography();
+            var pwd = "HelloWorld";
+            var hashedPwd = cryptography.Hash(pwd);
+            var result = cryptography.Verify(hashedPwd, "ByeByeWorld");
+
+            Assert.False(result);
+        }
     }
 }

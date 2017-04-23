@@ -61,7 +61,10 @@ namespace IdentityServerTest.Identity
 		{
             // Allows to inject IOptions<ArangoDBConfiguration> in classes.
             services.Configure<ArangoDBConfiguration>(Configuration.GetSection("ArangoDB"));
-            
+
+            services.AddTransient<ICryptography, Cryptography>();
+            services.AddSingleton<IUserStore, UserStore>();
+
             // Binding services before adding Identity server is required
             // as Identity server uses "TryAdd" for default stores.
             services.AddSingleton<IPersistedGrantStore, ArangoPersistedGrantStore>()

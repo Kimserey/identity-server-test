@@ -1,4 +1,5 @@
 ﻿using IdentityModel;
+using IdentityServer4.Models;
 using IdentityServer4.Validation;
 using Microsoft.Extensions.Logging;
 using System;
@@ -16,10 +17,12 @@ namespace IdentityServerTest.Identity
     public class ResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
     {
         private ILogger _logger;
+        private IUserStore _userStore;
 
-        public ResourceOwnerPasswordValidator(ILogger<ResourceOwnerPasswordValidator> logger)
+        public ResourceOwnerPasswordValidator(ILogger<ResourceOwnerPasswordValidator> logger, IUserStore userStore)
         {
             _logger = logger;
+            _userStore = userStore;
         }
 
         // Auhtentication method reference "amr":
@@ -33,11 +36,18 @@ namespace IdentityServerTest.Identity
         {
             _logger.LogDebug("Validate ResourceOwnerPassword");
 
-            context.Result = new GrantValidationResult(
-                "alice",
-                OidcConstants.AuthenticationMethods.Password,
-                new List<Claim> { new Claim(JwtClaimTypes.Name, "Alice") });
-            return Task.FromResult(0);
+            if (_userStore.VerifyUserPassword(context.UserName, context.Password))
+            {
+                context.Result = new GrantValidationResult(
+                    "alice",
+                    OidcConstants.AuthenticationMethods.Password,
+                    new List<Claim> { new Claim(JwtClaimTypes.Name, "Alice") });
+            }
+            else
+            {
+                context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant);
+            }
+            return Task.CompletedTask;
         }
     }
 }
