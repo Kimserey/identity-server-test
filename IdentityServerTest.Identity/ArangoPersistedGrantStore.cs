@@ -90,8 +90,10 @@ namespace IdentityServerTest.Identity
         {
             using (var database = ArangoDatabase.CreateWithSetting())
             {
+                var encodedKey = ToBase64UrlFromString(key);
+
                 var grant = await database.Collection(_arangoDBConfig.Collections.PersistedGrants)
-                    .DocumentAsync<ArangoDBPersistedGrant>(ToBase64UrlFromString(key));
+                    .DocumentAsync<ArangoDBPersistedGrant>(encodedKey);
 
                 return new PersistedGrant
                 {
