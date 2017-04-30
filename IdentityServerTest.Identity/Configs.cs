@@ -44,7 +44,12 @@ namespace IdentityServerTest.Identity
                     },
                     Scopes =
                     {
-                        new Scope("api.call"),
+                        new Scope("api.call")
+                        {
+                            UserClaims = {
+                                JwtClaimTypes.Name
+                            }
+                        },
                         new Scope("api.receive")
                     },
                     UserClaims =
