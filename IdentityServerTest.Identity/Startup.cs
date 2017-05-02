@@ -60,6 +60,7 @@ namespace IdentityServerTest.Identity
 		{
             // Allows to inject IOptions<ArangoDBConfiguration> in classes.
             services.Configure<ArangoDBConfiguration>(Configuration.GetSection("ArangoDB"));
+            services.Configure<CustomGrantValidatorOptions>(Configuration.GetSection("CustomGrantValidator"));
 
             services.AddTransient<ICryptography, Cryptography>();
             services.AddSingleton<IUserStore, UserStore>();

@@ -75,6 +75,7 @@ namespace IdentityServerTest.Identity
                     },
                     AllowedScopes = {
                         "api",
+                        "api.call",
                         // OpenId scope must be allowed scope to retrieve Identity claims from UserInfo endpoint.
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
