@@ -1,22 +1,23 @@
-﻿using System;   
+﻿using System;
 using System.Security.Claims;
 using System.Collections.Generic;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
 using IdentityModel;
 using IdentityServer4;
+using System.Linq;
 
 namespace IdentityServerTest.Identity
 {
-	public class Configs
-	{
+    public class Configs
+    {
         // Identity resources are retrieved from the UserInfo endpoint.
         // It can be set on the middleware "GetClaimsFromUserInfoEndpoint=true",
         // or can be invoked from the SDK client with UserInfoClient.
         // Place retrievable identity information here.
         public static IEnumerable<IdentityResource> GetIdentityResources()
-		{
-			return new List<IdentityResource>
+        {
+            return new List<IdentityResource>
             {
                 new IdentityResources.OpenId(),
                 // Every default IdentityResources contain a set of JwtUserClaims which will
@@ -24,13 +25,13 @@ namespace IdentityServerTest.Identity
                 new IdentityResources.Profile(),
                 new IdentityResources.Email()
             };
-		}
+        }
 
-		public static IEnumerable<ApiResource> GetApiResources()
-		{
-			return new List<ApiResource>
-			{
-				new ApiResource("webapi", "Web Api"),
+        public static IEnumerable<ApiResource> GetApiResources()
+        {
+            return new List<ApiResource>
+            {
+                new ApiResource("webapi", "Web Api"),
                 new ApiResource("api", "Web Api call")
                 {
                     ApiSecrets =
@@ -58,15 +59,16 @@ namespace IdentityServerTest.Identity
                     }
                 }
             };
-		}
+        }
 
-		public static IEnumerable<Client> GetClients()
-		{
-			return new List<Client>
+        public static IEnumerable<Client> GetClients()
+        {
+            return new List<Client>
             {
                 new Client {
                     ClientId = "client",
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword.Concat(new [] { "scoped" }),
+                    RequireClientSecret = false,
                     ClientSecrets =
                     {
                         new Secret("secret".Sha256())
@@ -84,62 +86,62 @@ namespace IdentityServerTest.Identity
                     AccessTokenType = AccessTokenType.Reference
                 },
                 new Client {
-					ClientId = "website_1",
-					ClientName = "Website 1",
-					AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-					ClientSecrets =
-					{
-						new Secret("secret".Sha256())
-					},
-					AllowedScopes =
-					{
+                    ClientId = "website_1",
+                    ClientName = "Website 1",
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+                    AllowedScopes =
+                    {
                         "api.receive",
                         JwtClaimTypes.Profile,
                     },
-					Claims =
-					{
-						new Claim("site.context", "one")
-					},
+                    Claims =
+                    {
+                        new Claim("site.context", "one")
+                    },
                     AccessTokenType = AccessTokenType.Reference
                 },
-				new Client {
-					ClientId = "website_2",
-					ClientName = "website_2",
-					RedirectUris = { "http://localhost:5002/signin-oidc" },
-					PostLogoutRedirectUris = { "http://localhost:5002/signout-callback-oidc" },
-					AllowedGrantTypes = GrantTypes.Implicit,
-					AllowedScopes =
-					{
-						"webapi",
+                new Client {
+                    ClientId = "website_2",
+                    ClientName = "website_2",
+                    RedirectUris = { "http://localhost:5002/signin-oidc" },
+                    PostLogoutRedirectUris = { "http://localhost:5002/signout-callback-oidc" },
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowedScopes =
+                    {
+                        "webapi",
                         IdentityServerConstants.StandardScopes.Profile
-					}
-				}
-			};
-		}
+                    }
+                }
+            };
+        }
 
-		public static List<TestUser> GetTestUsers()
-		{
-			return new List<TestUser> {
-				new TestUser {
-					SubjectId = "1",
-					Username = "alice",
-					Password = "password",
-					Claims = 
-					{
-						new Claim("test", "test"),
+        public static List<TestUser> GetTestUsers()
+        {
+            return new List<TestUser> {
+                new TestUser {
+                    SubjectId = "1",
+                    Username = "alice",
+                    Password = "password",
+                    Claims =
+                    {
+                        new Claim("test", "test"),
                         new Claim(JwtClaimTypes.Name, "alice"),
                         new Claim(JwtClaimTypes.NickName, "nickname"),
                         new Claim(JwtClaimTypes.Email, "test1@gmail.com"),
                         new Claim(JwtClaimTypes.EmailVerified, "test2@gmail.com")
                     }
-				},
-				new TestUser
-				{
-					SubjectId = "2",
-					Username = "bob",
-					Password = "password"
-				}
-			};
-		}
-	}
+                },
+                new TestUser
+                {
+                    SubjectId = "2",
+                    Username = "bob",
+                    Password = "password"
+                }
+            };
+        }
+    }
 }

@@ -22,8 +22,6 @@ namespace IdentityServerTest.ConsoleAppResourceOwner
             var tokenClient = new TokenClient(disco.TokenEndpoint, "client", "secret");
             var tokenResponse = await tokenClient.RequestResourceOwnerPasswordAsync("alice", "password");
 
-            tokenClient.RequestAsync
-
             if (tokenResponse.IsError)
             {
                 Console.WriteLine(tokenResponse.Error);

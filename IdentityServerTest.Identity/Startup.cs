@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -14,7 +13,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace IdentityServerTest.Identity
 {
-	public class Startup
+    public class Startup
 	{
         private readonly IConfigurationRoot Configuration;
 
@@ -67,12 +66,15 @@ namespace IdentityServerTest.Identity
 
             // Binding services before adding Identity server is required
             // as Identity server uses "TryAdd" for default stores.
-            services.AddSingleton<IPersistedGrantStore, ArangoPersistedGrantStore>()
+            services
+                    //.AddSingleton<IPersistedGrantStore, ArangoPersistedGrantStore>()
                     .AddIdentityServer()
                     .AddInMemoryApiResources(Configs.GetApiResources())
 					.AddInMemoryClients(Configs.GetClients())
 			        .AddInMemoryIdentityResources(Configs.GetIdentityResources())
-                    .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
+                    //.AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
+                    .AddTestUsers(Configs.GetTestUsers())
+                    .AddExtensionGrantValidator<CustomGrantValidator>()
                     .AddProfileService<ProfileService>()
 			        .AddTemporarySigningCredential();
 		}
