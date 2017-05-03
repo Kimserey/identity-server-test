@@ -9,18 +9,23 @@ using Microsoft.Extensions.Options;
 
 namespace IdentityServerTest.Identity
 {
-    public class CustomGrantValidatorOptions
+    public class CustomGrantTypes
     {
-        // Scope allowed to request for limited access token
-        public string Scope { get; set; }
+        public static string LimitedAccess => "limited_access";
     }
 
-    public class CustomGrantValidator : IExtensionGrantValidator
+    public class LimitedAccessGrantValidatorOptions
+    {
+        /// Valid scopes which can be used for limited access grant authorization.
+        public IEnumerable<string> ValidScopes { get; set; }
+    }
+
+    public class LimitedAccessGrantValidator : IExtensionGrantValidator
     {
         private ITokenValidator _tokenValidator;
-        private CustomGrantValidatorOptions _options;
+        private LimitedAccessGrantValidatorOptions _options;
 
-        public CustomGrantValidator(IOptions<CustomGrantValidatorOptions> options, ITokenValidator tokenValidator)
+        public LimitedAccessGrantValidator(IOptions<LimitedAccessGrantValidatorOptions> options, ITokenValidator tokenValidator)
         {
             _options = options.Value;
             _tokenValidator = tokenValidator;
@@ -39,7 +44,7 @@ namespace IdentityServerTest.Identity
                 return;
             }
 
-            var scope = result.Claims.FirstOrDefault(c => c.Type == JwtClaimTypes.Scope && c.Value == _options.Scope);
+            var scope = result.Claims.FirstOrDefault(c => c.Type == JwtClaimTypes.Scope && _options.ValidScopes.Contains(c.Value));
 
             if (scope == null)
             {
@@ -47,12 +52,17 @@ namespace IdentityServerTest.Identity
                 return;
             }
 
-            context.Result = new GrantValidationResult(subject: "alice", authenticationMethod: "scoped", claims: new List<Claim> { new Claim("limited", $"area:{area}") });
+            context.Result = new GrantValidationResult(
+                subject: result.Claims.FirstOrDefault(claim => claim.Type == JwtClaimTypes.Subject)?.Value,
+                authenticationMethod: CustomGrantTypes.LimitedAccess,
+                claims: new List<Claim> {
+                    new Claim("limit", area)
+                });
         }
 
         public string GrantType
         {
-            get { return "scoped"; }
+            get { return CustomGrantTypes.LimitedAccess; }
         }
     }
 }

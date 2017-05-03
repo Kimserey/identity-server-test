@@ -31,7 +31,18 @@ namespace IdentityServerTest.Identity
         {
             return new List<ApiResource>
             {
-                new ApiResource("webapi", "Web Api"),
+                new ApiResource("webapi", "Web Api")
+                {
+                    ApiSecrets =
+                    {
+                        // Api secret is used for the introspect endpoint.
+                        // The introspect endpoint is hit by the client to find back
+                        // identity using Reference token.
+                        // Because the introspect endpoint needs authentication,
+                        // the secret is used together with API name.
+                        new Secret("secret".Sha256())
+                    }
+                },
                 new ApiResource("api", "Web Api call")
                 {
                     ApiSecrets =
@@ -67,7 +78,7 @@ namespace IdentityServerTest.Identity
             {
                 new Client {
                     ClientId = "client",
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword.Concat(new [] { "scoped" }),
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword.Concat(new [] { CustomGrantTypes.LimitedAccess }),
                     RequireClientSecret = false,
                     ClientSecrets =
                     {
@@ -77,6 +88,7 @@ namespace IdentityServerTest.Identity
                         "api",
                         "api.call",
                         "webapi",
+
                         // OpenId scope must be allowed scope to retrieve Identity claims from UserInfo endpoint.
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,

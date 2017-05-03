@@ -60,7 +60,7 @@ namespace IdentityServerTest.Identity
 		{
             // Allows to inject IOptions<ArangoDBConfiguration> in classes.
             services.Configure<ArangoDBConfiguration>(Configuration.GetSection("ArangoDB"));
-            services.Configure<CustomGrantValidatorOptions>(Configuration.GetSection("CustomGrantValidator"));
+            services.Configure<LimitedAccessGrantValidatorOptions>(Configuration.GetSection("LimitedAccessGrant"));
 
             services.AddTransient<ICryptography, Cryptography>();
             services.AddSingleton<IUserStore, UserStore>();
@@ -75,7 +75,7 @@ namespace IdentityServerTest.Identity
 			        .AddInMemoryIdentityResources(Configs.GetIdentityResources())
                     //.AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
                     .AddTestUsers(Configs.GetTestUsers())
-                    .AddExtensionGrantValidator<CustomGrantValidator>()
+                    .AddExtensionGrantValidator<LimitedAccessGrantValidator>()
                     .AddProfileService<ProfileService>()
 			        .AddTemporarySigningCredential();
 		}

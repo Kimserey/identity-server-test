@@ -47,12 +47,11 @@ namespace IdentityServerTest.WebApi
                 ApiSecret = "secret",
                 AutomaticAuthenticate = true,
                 RequireHttpsMetadata = false,
-                AllowedScopes = { "api", "api.call" }
             });
 
             app.Map("/communication", mainApp =>
             {
-                mainApp.Map("/scoped", scopedApp =>
+                mainApp.Map("/calls", scopedApp =>
                 {
                     scopedApp.AllowScopes("api", "api.call");
                     scopedApp.Run(async context =>
@@ -61,9 +60,13 @@ namespace IdentityServerTest.WebApi
                     });
                 });
 
-                mainApp.AllowScopes("api");
                 mainApp.Run(async context =>
                 {
+                    if (context.User == null || context.User.Identity == null || !context.User.Identity.IsAuthenticated)
+                    {
+                        context.Response.StatusCode = 403;
+                        return;
+                    }
                     await context.Response.WriteAsync("API access");
                 });
             });
